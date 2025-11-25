@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
-import cardSchema from './cardSchema.mjs';
+import cardSchema from "./cardSchema.mjs";
 
 const binderSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "User",
     },
     cards: [cardSchema],
   },
@@ -13,3 +14,5 @@ const binderSchema = new mongoose.Schema(
 );
 
 const Binder = mongoose.model("Binder", binderSchema);
+
+export default Binder;
