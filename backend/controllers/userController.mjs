@@ -106,22 +106,30 @@ async function deleteCard(req, res) {
     // destructure card from url params
     const { _id } = req.params;
 
-    // delete card from req.user
-    req.user.binder = req.user.binder.filter((card) => {
-      card._id !== _id;
-    });
-    // save binder
-    const updatedUser = await req.user.save();
+    // check if url param is valid
+    const exists = req.user.binder.some((card) => card._id.toString() === _id);
+    if (exists) {
+      // delete card from req.user
+      req.user.binder = req.user.binder.filter(
+        (card) => card._id.toString() !== _id
+      );
 
-    // log
-    res.status(200).json({
-      msg: "card deleted successfully",
-      user: updatedUser.name,
-      binder: updatedUser.binder,
-    });
+      // save binder
+      const updatedUser = await req.user.save();
+
+      // log
+      res.status(200).json({
+        msg: "card deleted successfully",
+        user: updatedUser.name,
+        binder: updatedUser.binder,
+      });
+    } else {
+      res.status(400);
+      throw new Error("url param incorrect");
+    }
   } catch (error) {
     console.error(error);
-    throw new Error ('Error when deleting card')
+    throw new Error("Error when deleting card");
   }
 }
 
