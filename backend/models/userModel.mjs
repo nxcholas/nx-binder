@@ -1,20 +1,27 @@
 import mongoose from "mongoose";
-import binderSchema from './binderModel.mjs'
+import cardSchema from "../models/cardSchema.mjs";
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'please add name']
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "please add name"],
+    },
+    email: {
+      type: String,
+      required: [true, "please add email"],
+    },
+    password: {
+      type: String,
+      required: [true, "please add password"],
+    },
+    binder: {
+      type: [cardSchema],
+      default: [],
+    },
   },
-  email: {
-    type: String,
-    required: [true, 'please add email']
-  },
-  password: {
-    type: String,
-    required: [true, 'please add password']
-  },
-})
+  { timestamps: true }
+);
 
 const User = mongoose.model("User", userSchema);
 
