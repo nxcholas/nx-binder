@@ -61,7 +61,8 @@ async function loginUser(req, res) {
   }
 }
 
-// add a card (wip)
+// add a card
+// @private
 // before this function can run, must be protected with jwt token sent in Header auth
 // this function probably needs more params for specific card passed in
 async function addCard(req, res) {
@@ -75,10 +76,10 @@ async function addCard(req, res) {
     //   name: "N's Plan",
     // };
 
-    // sample card data to add
+    // card data to add
     // req.body
-    const {id, image, localId, name} = req.body
-    const card = {id, image, localId, name};
+    const { id, image, localId, name } = req.body;
+    const card = { id, image, localId, name };
 
     // add card to user.binder
     req.user.binder.push(card);
@@ -93,8 +94,34 @@ async function addCard(req, res) {
       binder: updatedUser.binder,
     });
   } catch (error) {
-    console.log(error)
-    throw new Error('error when adding new card');
+    console.log(error);
+    throw new Error("error when adding new card");
+  }
+}
+
+// delete card
+// @private
+async function deleteCard(req, res) {
+  try {
+    // destructure card from url params
+    const { _id } = req.params;
+
+    // delete card from req.user
+    req.user.binder = req.user.binder.filter((card) => {
+      card._id !== _id;
+    });
+    // save binder
+    const updatedUser = await req.user.save();
+
+    // log
+    res.status(200).json({
+      msg: "card deleted successfully",
+      user: updatedUser.name,
+      binder: updatedUser.binder,
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error ('Error when deleting card')
   }
 }
 
@@ -105,4 +132,4 @@ const generateToken = (id) => {
   });
 };
 
-export { registerUser, loginUser, addCard };
+export { registerUser, loginUser, addCard, deleteCard };
