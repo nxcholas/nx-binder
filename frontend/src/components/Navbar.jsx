@@ -2,18 +2,29 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LoginIcon from "@mui/icons-material/Login";
 import FolderIcon from "@mui/icons-material/Folder";
 import HomeIcon from "@mui/icons-material/Home";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Navbar() {
   const [sideOpen, setSideOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, [isLoggedIn]);
 
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setSideOpen(!sideOpen);
   };
+
+  const handleLogout = () => {};
   return (
     <>
       <div
@@ -50,13 +61,23 @@ function Navbar() {
           </div>
         </div>
         <div className="px-2 py-4 ml-auto flex gap-2">
-          <Button
-            type="link"
-            icon={LoginIcon}
-            sx={{ fontSize: 25 }}
-            text="Log In"
-            onClick={() => navigate("/login")}
-          />
+          {isLoggedIn ? (
+            <Button
+              type="link"
+              icon={LogoutIcon}
+              sx={{ fontSize: 25 }}
+              text="Log Out"
+              onClick={() => {}}
+            />
+          ) : (
+            <Button
+              type="link"
+              icon={LoginIcon}
+              sx={{ fontSize: 25 }}
+              text="Log In"
+              onClick={() => {navigate('/login')}}
+            />
+          )}
           <Button
             type="link"
             icon={FolderIcon}

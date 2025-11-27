@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import TextField from "@mui/material/TextField";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../lib/axios.mjs";
 
 function RegisterUserForm() {
@@ -14,6 +15,8 @@ function RegisterUserForm() {
   });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,17 +35,18 @@ function RegisterUserForm() {
 
     // POST: register user
     try {
-      await toast.promise(api.post("/register", form), {
+      const res = await toast.promise(api.post("/register", form), {
         loading: "Registering...",
         success: "Registered!",
         error: "User already exists. Please sign in.",
       });
-
-      console.log(form);
+      const token = res.data.token;
+      localStorage.setItem("token", token);
     } catch (error) {
       console.log("Error creating user.", error);
     } finally {
       setLoading(false);
+      navigate('/');
     }
   };
 
