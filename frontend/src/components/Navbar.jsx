@@ -20,7 +20,7 @@ function Navbar() {
         className={`
           absolute md:fixed
           top-0 left-0
-          z-0
+          z-2
           w-3/4 min-w-3/4
           md:w-[340px] md:min-w-[340px] md:max-w-[340px]
           min-h-screen
@@ -30,7 +30,7 @@ function Navbar() {
           ${sideOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       ></div>
-      <div className="sticky bg-gray-900 flex min-w-screen border border-t-0 border-b-neutral-600 justify-between max-w-[38px] text-nowrap max-h-[67px] items-center">
+      <div className="z-2 sticky bg-gray-900 flex min-w-screen border border-t-0 border-l-0 border-r-0 border-b-neutral-600 justify-between max-w-[38px] text-nowrap max-h-[67px] items-center">
         <div className="px-4 py-4 flex gap-2">
           <div>
             <Button

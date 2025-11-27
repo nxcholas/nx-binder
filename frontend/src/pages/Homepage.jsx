@@ -1,5 +1,6 @@
 import MainContent from "../components/MainContent";
 import Navbar from "../components/Navbar";
+import NoAccountFound from "../components/NoAccount";
 
 function Homepage() {
   return (
@@ -7,7 +8,9 @@ function Homepage() {
       <Navbar />
       <MainContent>
         {/* render content here */}
-        <h1>homepage</h1>
+        <div className="flex justify-center items-center">
+          <NoAccountFound />
+        </div>
       </MainContent>
     </>
   );
