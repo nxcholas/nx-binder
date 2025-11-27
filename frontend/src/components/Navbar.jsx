@@ -3,12 +3,24 @@ import LoginIcon from "@mui/icons-material/Login";
 import FolderIcon from "@mui/icons-material/Folder";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { forwardRef } from "react";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function Navbar() {
   const [sideOpen, setSideOpen] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const token = localStorage.getItem("token");
 
@@ -24,7 +36,24 @@ function Navbar() {
     setSideOpen(!sideOpen);
   };
 
-  const handleLogout = () => {};
+  const handleLogoutOpen = () => {
+    setLogoutOpen(true);
+  };
+
+  const handleLogoutClose = () => {
+    setLogoutOpen(false);
+  };
+
+  const handleLogout = () => {
+    // delete jwt token
+    localStorage.removeItem("token");
+    // reset loggedin state to run useEffect
+    setIsLoggedIn(false);
+    // close the modal
+    setLogoutOpen(false);
+    // navigate to home
+    navigate('/');
+  };
   return (
     <>
       <div
@@ -67,7 +96,7 @@ function Navbar() {
               icon={LogoutIcon}
               sx={{ fontSize: 25 }}
               text="Log Out"
-              onClick={() => {}}
+              onClick={handleLogoutOpen}
             />
           ) : (
             <Button
@@ -75,7 +104,9 @@ function Navbar() {
               icon={LoginIcon}
               sx={{ fontSize: 25 }}
               text="Log In"
-              onClick={() => {navigate('/login')}}
+              onClick={() => {
+                navigate("/login");
+              }}
             />
           )}
           <Button
@@ -85,6 +116,48 @@ function Navbar() {
             onClick={() => navigate("/binder")}
           />
         </div>
+        <Dialog
+          open={logoutOpen}
+          slots={{
+            transition: Transition,
+          }}
+          keepMounted
+          onClose={handleLogoutClose}
+          aria-describedby="alert-dialog-slide-description"
+          sx={{
+            "& .MuiPaper-root": {
+              backgroundColor: "oklch(13% 0.028 261.692)",
+              color: "#ffffff",
+              fontFamily: "Geist, sans-serif",
+            },
+            "& .MuiDialogTitle-root": {
+              fontFamily: "Geist, sans-serif",
+              color: "#ffffff",
+            },
+            "& .MuiDialogContent-root": {
+              fontFamily: "Geist, sans-serif",
+              color: "#ffffff",
+            },
+            "& .MuiDialogContentText-root": {
+              fontFamily: "Geist, sans-serif",
+              color: "#ffffff",
+            },
+            "& .MuiDialogActions-root": {
+              fontFamily: "Geist, sans-serif",
+              color: "#ffffff",
+            },
+          }}
+        >
+          <DialogTitle>{"Ready to Log Out?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              You can always come back and sign in again whenever you're ready.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button type={"secondary"} text={"Log out"} onClick={handleLogout} />
+          </DialogActions>
+        </Dialog>
       </div>
     </>
   );

@@ -1,4 +1,11 @@
-export default function Button({ icon: Icon, type, sx, text, onClick, loading }) {
+export default function Button({
+  icon: Icon,
+  type,
+  sx,
+  text,
+  onClick,
+  loading,
+}) {
   if (type === "toggle") {
     return (
       <button
@@ -28,6 +35,18 @@ export default function Button({ icon: Icon, type, sx, text, onClick, loading })
         onClick={onClick}
         type="submit"
         disabled={loading}
+      >
+        {Icon && <Icon sx={sx} />}
+        {text}
+      </button>
+    );
+  }
+
+  if (type === "secondary") {
+    return (
+      <button
+        className="cursor-pointer flex gap-2 px-3 py-1 bg-rose-700 hover:bg-rose-800 items-center rounded-xl text-neutral-100 font-bold "
+        onClick={onClick}
       >
         {Icon && <Icon sx={sx} />}
         {text}
