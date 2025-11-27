@@ -12,6 +12,14 @@ const PORT = process.env.PORT;
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+if(process.env.node_ENV !== "production") {
+  //  cors
+  app.use(
+    cors({
+      origin: "http://localhost:5173",
+    })
+  );
+}
 
 // middleware - routes
 app.use("", userRouter)
