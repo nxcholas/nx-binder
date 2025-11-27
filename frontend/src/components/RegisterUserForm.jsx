@@ -1,6 +1,4 @@
 import Button from "../components/Button";
-import MainContent from "../components/MainContent";
-import Navbar from "../components/Navbar";
 import TextField from "@mui/material/TextField";
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -25,12 +23,10 @@ function RegisterUserForm() {
     // client side validation check
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       toast.error("Invalid email. Please enter a valid email");
-      return;
     }
 
     if (form.password !== confirmPassword) {
-      toast.error("Invalid password. Please confirm password.");
-      return;
+      toast.error("Invalid password. Please confirm password.")
     }
 
     // POST: register user
@@ -54,7 +50,7 @@ function RegisterUserForm() {
     setConfirmPassword(e.target.value);
   };
 
-  const handleChange = (e, prev) => {
+  const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -63,7 +59,7 @@ function RegisterUserForm() {
 
   return (
     <div className="w-2/3 min-w-[500px] max-w-[640px] md:min-w-[9/10] h-full flex flex-col justify-center bg-gray-950/30 px-24 py-16 rounded-3xl">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={e => handleSubmit(e)}>
         <div className="title w-full flex flex-col justify-center items-center mb-8">
           <h1 className="text-4xl font-bold mb-4">Sign Up</h1>
           <p className="italic text-gray-400">Sign up up gain access!</p>

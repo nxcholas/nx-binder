@@ -9,19 +9,16 @@ function Homepage() {
   useEffect(() => {
     const token = localStorage.getItem("token")
     if (token) {
-      setIsAuthenticated(true);
+      setIsAuthenticated(!!token);
     }
-  }, [isAuthenticated])
+  }, [])
   return (
     <>
       <Navbar />
       <MainContent>
         {/* render content here */}
         <div className="flex justify-center items-center">
-          {!isAuthenticated && (
-            <NoAccountFound />
-          )}
-          {}
+          {isAuthenticated ? (<p>test</p>) : (<NoAccountFound />)}
         </div>
       </MainContent>
     </>
