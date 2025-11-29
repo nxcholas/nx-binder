@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import api from "../lib/axios.mjs";
 
 function LoginForm() {
@@ -11,6 +12,7 @@ function LoginForm() {
     password: "",
   });
 
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,9 +32,11 @@ function LoginForm() {
       });
       // grab token from res
       const token = res.data.token;
+      const userData = res.data;
 
-      // set token in localstorage
-      localStorage.setItem("token", token);
+      // set token in localstorage using auth context
+      // sets userdata in auth context
+      login(token, userData);
 
     } catch (error) {
       toast.error("There was some problem logging you in. Please try again.");

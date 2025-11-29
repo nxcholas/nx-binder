@@ -11,8 +11,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { forwardRef } from "react";
+import { useState, forwardRef } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -21,19 +21,14 @@ const Transition = forwardRef(function Transition(props, ref) {
 function Navbar() {
   const [sideOpen, setSideOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, [isLoggedIn]);
 
   const navigate = useNavigate();
 
+  // 👇 pull auth state from context
+  const { isAuthenticated, logout } = useAuth();
+
   const toggleMenu = () => {
-    setSideOpen(!sideOpen);
+    setSideOpen((prev) => !prev);
   };
 
   const handleLogoutOpen = () => {
@@ -45,15 +40,16 @@ function Navbar() {
   };
 
   const handleLogout = () => {
-    // delete jwt token
-    localStorage.removeItem("token");
-    // reset loggedin state to run useEffect
-    setIsLoggedIn(false);
+    // use context logout (updates token + isAuthenticated)
+    logout();
+
     // close the modal
     setLogoutOpen(false);
+
     // navigate to home
-    navigate('/');
+    navigate("/");
   };
+
   return (
     <>
       <div
@@ -70,6 +66,7 @@ function Navbar() {
           ${sideOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       ></div>
+
       <div className="z-2 sticky bg-gray-900 flex min-w-screen border border-t-0 border-l-0 border-r-0 border-b-neutral-600 justify-between max-w-[38px] text-nowrap max-h-[67px] items-center">
         <div className="px-4 py-4 flex gap-2">
           <div>
@@ -89,8 +86,9 @@ function Navbar() {
             />
           </div>
         </div>
+
         <div className="px-2 py-4 ml-auto flex gap-2">
-          {isLoggedIn ? (
+          {isAuthenticated ? (
             <Button
               type="link"
               icon={LogoutIcon}
@@ -104,11 +102,10 @@ function Navbar() {
               icon={LoginIcon}
               sx={{ fontSize: 25 }}
               text="Log In"
-              onClick={() => {
-                navigate("/login");
-              }}
+              onClick={() => navigate("/login")}
             />
           )}
+
           <Button
             type="link"
             icon={FolderIcon}
@@ -116,11 +113,10 @@ function Navbar() {
             onClick={() => navigate("/binder")}
           />
         </div>
+
         <Dialog
           open={logoutOpen}
-          slots={{
-            transition: Transition,
-          }}
+          slots={{ transition: Transition }}
           keepMounted
           onClose={handleLogoutClose}
           aria-describedby="alert-dialog-slide-description"
@@ -155,11 +151,12 @@ function Navbar() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button type={"secondary"} text={"Log out"} onClick={handleLogout} />
+            <Button type="secondary" text="Log out" onClick={handleLogout} />
           </DialogActions>
         </Dialog>
       </div>
     </>
   );
 }
+
 export default Navbar;

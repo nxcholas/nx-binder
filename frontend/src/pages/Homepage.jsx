@@ -1,24 +1,24 @@
 import MainContent from "../components/MainContent";
 import Navbar from "../components/Navbar";
 import NoAccountFound from "../components/NoAccount";
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 
 function Homepage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (token) {
-      setIsAuthenticated(!!token);
-    }
-  }, [])
   return (
     <>
-      <Navbar />
+      <Navbar/>
       <MainContent>
         {/* render content here */}
         <div className="flex justify-center items-center">
-          {isAuthenticated ? (<p>test</p>) : (<NoAccountFound />)}
+          {isAuthenticated ? (
+            // insert dashboard here or user data
+            <p>test</p>
+          ) : (
+            <NoAccountFound />
+          )}
         </div>
       </MainContent>
     </>
