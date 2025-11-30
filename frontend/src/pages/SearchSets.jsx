@@ -41,7 +41,7 @@ function SearchSets() {
         {/* render content here */}
         {/* get all sets */}
         {data === null ? (
-          <div className="binder-grid grid grid-cols-3 w-full overflow-y-auto max-h-[80vh] gap-4 leading-none">
+          <div className="binder-grid grid grid-cols-3 w-full overflow-y-auto max-h-[90vh] gap-4 leading-none">
             {sets.map((set) => (
               <div
                 key={set.id}

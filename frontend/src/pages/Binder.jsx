@@ -8,8 +8,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import TextField from "@mui/material/TextField";
 import { useAuth } from "../context/AuthContext";
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useMemo } from "react";
 import api from "../lib/axios.mjs";
 import toast from "react-hot-toast";
 
@@ -23,8 +24,16 @@ function Binder() {
     JSON.parse(localStorage.getItem("user") || "null")
   );
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const { isAuthenticated } = useAuth();
+  const filteredCards = useMemo(() => {
+    if (!user.binder) return [];
+
+    return user.binder.filter((card) =>
+      card.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search, user.binder]);
 
   const handleDelete = () => {
     setDeleteOpen(!deleteOpen);
@@ -83,14 +92,26 @@ function Binder() {
           <NoCardsFound />
         ) : (
           <>
-            <div className="w-full text-center rounded-t-2xl py-4 mb-16">
+            <div className="w-full text-center rounded-t-2xl py-4 mb-2">
               <h1 className="md:text-6xl text-2xl font-bold">
                 {`${user.name}'s Binder`}
               </h1>
             </div>
-
+            <div className="w-full sticky top-0 z-10">
+              <TextField
+                id="filled"
+                label="Search"
+                variant="filled"
+                type="text"
+                sx={{ input: { color: "white" } }}
+                margin="normal"
+                fullWidth
+                name="search"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
             <div className="binder-grid grid grid-cols-3 w-full overflow-y-auto max-h-[80vh] gap-x-1 leading-none">
-              {user.binder.map((card) => (
+              {filteredCards.map((card) => (
                 <div
                   key={card._id}
                   className="w-full aspect-63/88 flex items-center justify-center"
