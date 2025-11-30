@@ -67,19 +67,10 @@ async function loginUser(req, res) {
 // this function probably needs more params for specific card passed in
 async function addCard(req, res) {
   try {
-    // sample card data to add
-    // raw example
-    // const card = {
-    //   id: "sv10.5b-170",
-    //   image: "https://assets.tcgdex.net/en/sv/sv10.5b/170",
-    //   localId: "170",
-    //   name: "N's Plan",
-    // };
 
     // card data to add
     // req.body
-    const { id, image, localId, name } = req.body;
-    const card = { id, image, localId, name };
+    const card = req.body;
 
     // add card to user.binder
     req.user.binder.push(card);

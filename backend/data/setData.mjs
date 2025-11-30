@@ -22,6 +22,8 @@ const setNames = [
   "sv10",
   "sv10.5b",
   "sv10.5w",
+  "me01",
+  "me02",
 ];
 
 // Use in an async context
@@ -58,6 +60,8 @@ async function getSets() {
     sv10: await getSpecificSet(setNames.find((name) => name === "sv10")),
     sv11b: await getSpecificSet(setNames.find((name) => name === "sv10.5b")),
     sv11w: await getSpecificSet(setNames.find((name) => name === "sv10.5w")),
+    me01: await getSpecificSet(setNames.find((name)=> name === "me01" )),
+    me02: await getSpecificSet(setNames.find((name)=> name === "me02" )),
   };
   return sets;
 }

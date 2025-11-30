@@ -4,6 +4,7 @@ import cors from "cors";
 import TCGdex from '@tcgdex/sdk';
 import { connectDB } from "./config/db.mjs";
 import userRouter from "./routes/userRoutes.mjs";
+import setRouter from "./routes/setRoutes.mjs";
 
 dotenv.config();
 const app = express();
@@ -23,6 +24,7 @@ if(process.env.node_ENV !== "production") {
 
 // middleware - routes
 app.use("", userRouter)
+app.use("", setRouter)
 
 
 connectDB().then(
