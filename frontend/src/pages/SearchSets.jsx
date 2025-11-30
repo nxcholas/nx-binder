@@ -24,6 +24,7 @@ function SearchSets() {
   // get set by id
   const handleClick = async (id) => {
     setSelectedSet(id);
+    console.log(id)
 
     try {
       const res = await api.get(`/searchsets/${id}`);

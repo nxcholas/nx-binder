@@ -3,6 +3,8 @@ import { useState, useEffect, forwardRef, useMemo } from "react";
 import Navbar from "../components/Navbar";
 import MainContent from "../components/MainContent";
 import Button from "../components/Button";
+import CardPriceSkeleton from "../components/CardPriceSkeleton";
+import CardPriceDifferenceChartSkeleton from "../components/CardPriceDifferenceChartSkeleton";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -13,13 +15,19 @@ import api from "../lib/axios.mjs";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import TextField from "@mui/material/TextField";
+import TCGdex from "@tcgdex/sdk";
+import CardPriceChart from "../components/CardPriceChart";
+import CardPriceDifferenceChart from "../components/CardPriceDifferenceChart";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function SetPage() {
+  // url param
   const { id } = useParams();
+
+  // states
   const [data, setData] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
   const [addOpen, setAddOpen] = useState(false);
@@ -27,7 +35,9 @@ function SetPage() {
     JSON.parse(localStorage.getItem("user") || "null")
   );
   const [search, setSearch] = useState("");
+  const [pricing, setPricing] = useState(null);
 
+  // init variables
   const { isAuthenticated } = useAuth();
   const filteredCards = useMemo(() => {
     if (!data?.cards) return [];
@@ -49,6 +59,27 @@ function SetPage() {
 
     fetchSet();
   }, [id]);
+
+  // get pricing data on card click
+  useEffect(() => {
+    async function getPricing() {
+      if (selectedCard) {
+        const tcgdex = new TCGdex("en");
+        const card = await tcgdex.card.get(selectedCard.id);
+        const { low, avg, avg7, avg30, trend } = card.pricing.cardmarket;
+        const destructuredPricing = {
+          low,
+          avg,
+          avg7,
+          avg30,
+          trend,
+        };
+        setPricing(destructuredPricing);
+        console.log(pricing);
+      }
+    }
+    getPricing();
+  }, [selectedCard]);
 
   const handleAdd = () => {
     setAddOpen(!addOpen);
@@ -165,16 +196,53 @@ function SetPage() {
                 onClick={() => setSelectedCard(null)}
               >
                 <div
-                  className="max-w-[90%] max-h-[90%] p-4 flex"
+                  className="min-w-[70vw] max-h-[90%] p-4 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img
                     src={selectedCard.image + "/high.png"}
                     alt={selectedCard.name}
-                    className="max-h-[90vh] w-auto object-contain drop-shadow-2xl transition-transform duration-300 scale-100"
+                    className="max-h-[90vh] w-auto object-contain drop-shadow-2xl transition-transform duration-300 scale-100 mb-4 md:mb-0"
                   />
-                  <div className="">
-                    <Button text={"Add"} type={"submit"} onClick={handleAdd} />
+                  <div className="chart-container flex flex-col w-full gap-2">
+                    <div className="flex justify-between items-center px-4 py-4 rounded-2xl bg-gray-900">
+                      <h1 className="text-xl font-semibold">
+                        {selectedCard.name}
+                      </h1>
+                      <Button
+                        text={"Add Card"}
+                        type={"submit"}
+                        onClick={handleAdd}
+                      />
+                    </div>
+                    <div>
+                      {/* charts here */}
+                      <div className="bg-gray-900 rounded-2xl flex flex-col">
+                        {pricing === null ? (
+                          <CardPriceSkeleton />
+                        ) : (
+                          <>
+                            <div className="label w-full text-center p-4 font-bold">
+                              <h1>Card Pricing (USD)</h1>
+                            </div>
+                            {/* insert more charts here */}
+                            <CardPriceChart pricing={pricing} />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="bg-gray-900 rounded-2xl">
+                      {pricing === null ? (
+                        <CardPriceDifferenceChartSkeleton />
+                      ) : (
+                        <>
+                          <div className="label w-full text-center p-4 font-bold">
+                            <h1>Pricing Difference (USD)</h1>
+                          </div>
+                          <CardPriceDifferenceChart pricing={pricing} />
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <Dialog

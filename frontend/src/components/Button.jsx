@@ -31,7 +31,7 @@ export default function Button({
   if (type === "submit") {
     return (
       <button
-        className="cursor-pointer flex gap-2 px-3 py-1 bg-emerald-500 hover:bg-emerald-600 items-center justify-center rounded-sm text-neutral-100 font-bold text-lg w-full "
+        className="cursor-pointer gap-2 px-3 py-1 bg-emerald-500 hover:bg-emerald-600 items-center justify-center rounded-sm text-neutral-100 font-bold text-lg"
         onClick={onClick}
         type="submit"
         disabled={loading}

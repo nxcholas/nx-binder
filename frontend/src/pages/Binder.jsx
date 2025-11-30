@@ -28,12 +28,12 @@ function Binder() {
 
   const { isAuthenticated } = useAuth();
   const filteredCards = useMemo(() => {
-    if (!user.binder) return [];
+    if (!user) return [];
 
     return user.binder.filter((card) =>
       card.name.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search, user.binder]);
+  }, [search, user]);
 
   const handleDelete = () => {
     setDeleteOpen(!deleteOpen);
@@ -88,7 +88,7 @@ function Binder() {
     <>
       <Navbar />
       <MainContent>
-        {!isAuthenticated || !user ? (
+        {!isAuthenticated || user === null ? (
           <NoCardsFound />
         ) : (
           <>
