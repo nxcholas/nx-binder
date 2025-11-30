@@ -1,5 +1,17 @@
 {
 	"dependencies": {
 		"mongodb": "^7.0.0"
-	}
+	},
+	"name": "nx-binder",
+	"version": "1.0.0",
+	"main": "index.js",
+	"devDependencies": {},
+	"scripts": {
+		"build": "pnpm install --prefix backend && pnpm install --prefix frontend && pnpm run build --prefix frontend",
+		"start": "pnpm run start --prefix backend"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": ""
 }
