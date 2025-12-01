@@ -42,11 +42,11 @@ function SearchSets() {
         {/* render content here */}
         {/* get all sets */}
         {data === null ? (
-          <div className="binder-grid grid grid-cols-3 w-full overflow-y-auto max-h-[90vh] gap-4 leading-none">
+          <div className="binder-grid grid md:grid-cols-3 w-full md:w-3/4 overflow-y-auto gap-4 min-h-screen md:min-w-[70vw] px-4 py-2">
             {sets.map((set) => (
               <div
                 key={set.id}
-                className="w-full flex items-center justify-center bg-gray-950 rounded-4xl p-4 cursor-pointer"
+                className="w-full flex items-center justify-center bg-gray-950 rounded-4xl p-4 cursor-pointer min-w-[200px]"
                 onClick={() => handleClick(set.id)}
               >
                 <img

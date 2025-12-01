@@ -153,8 +153,8 @@ function SetPage() {
       <MainContent>
         {/* render content here */}
         {/* add a search here maybe */}
-        <div className="flex flex-col">
-          <div className="w-full sticky top-0 z-10">
+        <div className="flex flex-col px-8">
+          <div className="w-full sticky top-0 z-0">
             <TextField
               id="filled"
               label="Search"

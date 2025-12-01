@@ -5,4 +5,5 @@ body {
   font-family: 'Geist Variable', sans-serif;
   background-color: oklch(21% 0.034 264.665);
   color: white;
+  overflow-y: hidden;
 }

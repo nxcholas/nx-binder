@@ -92,38 +92,46 @@ function Binder() {
           <NoCardsFound />
         ) : (
           <>
-            <div className="w-full text-center rounded-t-2xl py-4 mb-2">
-              <h1 className="md:text-6xl text-2xl font-bold">
-                {`${user.name}'s Binder`}
-              </h1>
-            </div>
-            <div className="w-full sticky top-0 z-10">
-              <TextField
-                id="filled"
-                label="Search"
-                variant="filled"
-                type="text"
-                sx={{ input: { color: "white" } }}
-                margin="normal"
-                fullWidth
-                name="search"
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className="binder-grid grid grid-cols-3 w-full overflow-y-auto max-h-[80vh] gap-x-1 leading-none">
-              {filteredCards.map((card) => (
-                <div
-                  key={card._id}
-                  className="w-full aspect-63/88 flex items-center justify-center"
-                  onClick={() => setSelectedCard(card)}
-                >
-                  <img
-                    src={card.image + "/high.png"}
-                    alt={card.name || `Card ${card._id}`}
-                    className="max-w-full max-h-full object-contain block cursor-pointer transition-transform duration-200 hover:scale-95"
-                  />
-                </div>
-              ))}
+            <div className="container min-h-screen">
+              <div className="w-full text-center rounded-t-2xl pt-4">
+                <h1 className="md:text-6xl text-2xl font-bold">
+                  {`${user.name}'s Binder`}
+                </h1>
+              </div>
+              <div className="w-full sticky top-0 z-0 px-8">
+                <TextField
+                  id="filled"
+                  label="Search"
+                  variant="filled"
+                  type="text"
+                  sx={{
+                    input: { color: "white" },
+                    "& .MuiInputBase-root": {
+                      position: "relative",
+                      zIndex: 0, // <-- THIS is the real layer
+                    },
+                  }}
+                  margin="normal"
+                  fullWidth
+                  name="search"
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <div className="binder-grid grid grid-cols-2 md:grid-cols-3 w-full overflow-y-auto max-h-[80vh] gap-x-1 leading-none px-8">
+                {filteredCards.map((card) => (
+                  <div
+                    key={card._id}
+                    className="w-full aspect-63/88 flex items-center justify-center"
+                    onClick={() => setSelectedCard(card)}
+                  >
+                    <img
+                      src={card.image + "/high.png"}
+                      alt={card.name || `Card ${card._id}`}
+                      className="max-w-full max-h-full object-contain block cursor-pointer transition-transform duration-200 hover:scale-95"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
             {selectedCard && (
