@@ -54,6 +54,7 @@ function SearchSets() {
                   src={set.logo + ".png"}
                   alt={set.name || `Set ${set.id}`}
                   className="max-w-full max-h-full object-contain block "
+                  loading="lazy"
                 />
               </div>
             ))}
@@ -69,6 +70,7 @@ function SearchSets() {
                     src={card.image + "/high.png"}
                     alt={card.name || `Card ${card._id}`}
                     className="max-w-full max-h-full object-contain block cursor-pointer transition-transform duration-200 hover:scale-95"
+                    loading="lazy"
                   />
                 </div>
               ))}

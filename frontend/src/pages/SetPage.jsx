@@ -36,6 +36,7 @@ function SetPage() {
   );
   const [search, setSearch] = useState("");
   const [pricing, setPricing] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
   // init variables
   const { isAuthenticated } = useAuth();
@@ -136,7 +137,7 @@ function SetPage() {
         <Navbar />
         <MainContent>
           <div className="binder-grid grid grid-cols-3 w-full overflow-y-auto max-h-[80vh] gap-1 leading-none">
-            {Array.from({ length: 12 }).map((_, i) => (
+            {!loaded && Array.from({ length: 12 }).map((_, i) => (
               <div
                 key={i}
                 className="w-full aspect-63/88 bg-gray-950 rounded-md animate-pulse"
@@ -186,6 +187,7 @@ function SetPage() {
                   src={card.image + "/high.png"}
                   alt={card.name || `Card ${card._id}`}
                   className="max-w-full max-h-full object-contain block cursor-pointer transition-transform duration-200 hover:scale-95"
+                  onLoad={() => setLoaded(true)}
                 />
               </div>
             ))}
