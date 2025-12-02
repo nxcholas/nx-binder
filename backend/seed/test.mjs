@@ -4,7 +4,7 @@ import TCGdex from "@tcgdex/sdk";
 const tcgdex = new TCGdex("en");
 
 async function test() {
-  const card = await tcgdex.card.get("sv01-251");
+  const card = await tcgdex.card.get("me02-125");
   console.log(card.pricing);
 }
 

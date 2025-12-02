@@ -9,7 +9,7 @@ const NoAccountFound = () => {
   return (
     <>
       {!isAuthenticated && (
-        <div className="flex flex-col items-center justify-center  space-y-6 max-w-md mx-auto text-center">
+        <div className="flex flex-col items-center justify-center space-y-6 max-w-md mx-auto text-center">
           <div className="bg-gray-600 rounded-3xl p-4">
             <FolderSharedIcon sx={{ fontSize: 84 }} />
           </div>

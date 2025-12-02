@@ -1,4 +1,5 @@
 import SdCardAlertIcon from '@mui/icons-material/SdCardAlert';
+import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Button from "./Button";
@@ -14,14 +15,15 @@ const NoCardsFound = () => {
             <SdCardAlertIcon sx={{ fontSize: 84 }} />
           </div>
           <h1 className="text-2xl font-bold">No cards found</h1>
-          <p className="text-lg">
-            Ready to showcase your binder? Click the link below to get started.
+          <p className="text-l">
+            Ready to showcase your binder? Let's log you in before we get started.
           </p>
           <Button
-            text={"Register Now"}
-            onClick={() => navigate("/register")}
+            text={"Log In"}
+            onClick={() => navigate("/login")}
             type={"link"}
             sx={{ fontSize: 25 }}
+            icon={LoginIcon}
           />
         </div>
       )}

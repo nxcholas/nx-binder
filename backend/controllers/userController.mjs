@@ -1,5 +1,6 @@
 import User from "../models/userModel.mjs";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 // register user
 async function registerUser(req, res) {
@@ -18,11 +19,15 @@ async function registerUser(req, res) {
     throw new Error("User already exists");
   }
 
+  // hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
   // create the new user
   const user = await User.create({
     name,
     email,
-    password,
+    password: hashedPassword,
   });
 
   if (user) {
@@ -47,7 +52,7 @@ async function loginUser(req, res) {
   const user = await User.findOne({ email });
 
   // check password
-  if (user && password === user.password) {
+  if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       msg: "user logged in",
       _id: user.id,
@@ -67,7 +72,6 @@ async function loginUser(req, res) {
 // this function probably needs more params for specific card passed in
 async function addCard(req, res) {
   try {
-
     // card data to add
     // req.body
     const card = req.body;
