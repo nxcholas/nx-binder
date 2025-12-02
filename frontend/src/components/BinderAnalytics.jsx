@@ -1,9 +1,11 @@
 import BinderAnalyticsCard from "./BinderAnalyticsCard";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import { useState, useEffect } from "react";
 import TCGdex from "@tcgdex/sdk";
 import DiversityChart from "./DiversityChart";
+import RecentlyAdded from "./RecentlyAdded";
 
 function BinderAnalytics() {
   // states
@@ -12,7 +14,6 @@ function BinderAnalytics() {
 
   // init
   const user = JSON.parse(localStorage.getItem("user"));
-  const diversityData = [];
 
   // compute values here
   // net worth
@@ -40,7 +41,6 @@ function BinderAnalytics() {
     setTotalCards(totalCards);
   });
 
-
   return (
     <div className="min-h-screen">
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 min-h-[30%]">
@@ -57,6 +57,7 @@ function BinderAnalytics() {
           type={"num"}
         />
         <DiversityChart />
+        <RecentlyAdded icon={<LocalAtmIcon />} label={"Recently Added"}/>
       </div>
     </div>
   );

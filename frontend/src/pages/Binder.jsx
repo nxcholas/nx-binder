@@ -9,8 +9,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
+import CardPriceChart from "../components/CardPriceChart.jsx";
+import CardPriceDifferenceChart from "../components/CardPriceDifferenceChart.jsx";
+import CardPriceSkeleton from "../components/CardPriceSkeleton.jsx";
+import CardPriceDifferenceChartSkeleton from "../components/CardPriceDifferenceChartSkeleton.jsx";
 import { useAuth } from "../context/AuthContext";
-import { useState, forwardRef, useMemo } from "react";
+import { useState, forwardRef, useMemo, useEffect } from "react";
+import TCGdex from "@tcgdex/sdk";
 import api from "../lib/axios.mjs";
 import toast from "react-hot-toast";
 
@@ -25,6 +30,7 @@ function Binder() {
   );
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [search, setSearch] = useState("");
+   const [pricing, setPricing] = useState(null);
 
   const { isAuthenticated } = useAuth();
   const filteredCards = useMemo(() => {
@@ -34,6 +40,27 @@ function Binder() {
       card.name.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, user]);
+
+    // get pricing data on card click
+  useEffect(() => {
+    async function getPricing() {
+      if (selectedCard) {
+        const tcgdex = new TCGdex("en");
+        const card = await tcgdex.card.get(selectedCard.id);
+        const { low, avg, avg7, avg30, trend } = card.pricing.cardmarket;
+        const destructuredPricing = {
+          low,
+          avg,
+          avg7,
+          avg30,
+          trend,
+        };
+        setPricing(destructuredPricing);
+        console.log(pricing);
+      }
+    }
+    getPricing();
+  }, [selectedCard]);
 
   const handleDelete = () => {
     setDeleteOpen(!deleteOpen);
@@ -98,7 +125,7 @@ function Binder() {
                   {`${user.name}'s Binder`}
                 </h1>
               </div>
-              <div className="w-full sticky top-0 z-0 px-8">
+              <div className="w-fullsticky top-0 z-0 px-13.5">
                 <TextField
                   id="filled"
                   label="Search"
@@ -117,7 +144,7 @@ function Binder() {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <div className="binder-grid grid grid-cols-2 md:grid-cols-3 w-full overflow-y-auto max-h-[80vh] gap-x-1 leading-none px-8">
+              <div className="binder-grid grid grid-cols-2 md:grid-cols-3 w-9/10 overflow-y-auto max-h-[80vh] gap-2 leading-none mx-auto pb-24">
                 {filteredCards.map((card) => (
                   <div
                     key={card._id}
@@ -134,27 +161,60 @@ function Binder() {
               </div>
             </div>
 
-            {selectedCard && (
+            {selectedCard && isAuthenticated && (
               <div
                 className="fixed inset-0 z-50 flex items-center justify-center
               bg-black/60 backdrop-blur-sm"
                 onClick={() => setSelectedCard(null)}
               >
                 <div
-                  className="max-w-[90%] max-h-[90%] p-4 flex"
+                  className="min-w-[70vw] max-h-[90%] p-4 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img
                     src={selectedCard.image + "/high.png"}
                     alt={selectedCard.name}
-                    className="max-h-[90vh] w-auto object-contain drop-shadow-2xl transition-transform duration-300 scale-100"
+                    className="max-h-[90vh] w-auto object-contain drop-shadow-2xl transition-transform duration-300 scale-100 mb-4 md:mb-0"
                   />
-                  <div className="">
-                    <Button
-                      text={"Delete"}
-                      type={"secondary"}
-                      onClick={handleDelete}
-                    />
+                  <div className="chart-container flex flex-col w-full gap-2">
+                    <div className="flex justify-between items-center px-4 py-4 rounded-2xl bg-gray-900">
+                      <h1 className="text-xl font-semibold">
+                        {selectedCard.name}
+                      </h1>
+                      <Button
+                        text={"Delete Card"}
+                        type={"secondary"}
+                        onClick={handleDelete}
+                      />
+                    </div>
+                    <div>
+                      {/* charts here */}
+                      <div className="bg-gray-900 rounded-2xl flex flex-col">
+                        {pricing === null ? (
+                          <CardPriceSkeleton />
+                        ) : (
+                          <>
+                            <div className="label w-full text-center p-4 font-bold">
+                              <h1>Card Pricing (USD)</h1>
+                            </div>
+                            {/* insert more charts here */}
+                            <CardPriceChart pricing={pricing} />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="bg-gray-900 rounded-2xl">
+                      {pricing === null ? (
+                        <CardPriceDifferenceChartSkeleton />
+                      ) : (
+                        <>
+                          <div className="label w-full text-center p-4 font-bold">
+                            <h1>Pricing Difference (USD)</h1>
+                          </div>
+                          <CardPriceDifferenceChart pricing={pricing} />
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <Dialog
@@ -190,13 +250,13 @@ function Binder() {
                   <DialogTitle>{"Delete this card?"}</DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                      This card will be permanently deleted from your binder.
+                      This card will be permanently deleted from your binder!
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
                     <Button
                       type="secondary"
-                      text="Delete"
+                      text="Delete Card"
                       onClick={() => deleteCard(selectedCard._id)}
                     />
                   </DialogActions>

@@ -5,12 +5,12 @@ import protect from '../middleware/authMiddleware.mjs';
 const userRouter = express.Router();
 
 // POST
-userRouter.post('/register', registerUser)
-userRouter.post('/login', loginUser)
+userRouter.post('/api/register', registerUser)
+userRouter.post('/api/login', loginUser)
 
-userRouter.route('/binder/addcard').post(protect, addCard)
+userRouter.route('/api/binder/addcard').post(protect, addCard)
 
 // DELETE
-userRouter.route('/binder/deletecard/:_id').delete(protect, deleteCard);
+userRouter.route('/api/binder/deletecard/:_id').delete(protect, deleteCard);
 
 export default userRouter;
