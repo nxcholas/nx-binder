@@ -16,7 +16,7 @@ function Homepage() {
         <div className="flex flex-col min-w-full min-h-screen p-6">
           {isAuthenticated ? (
             // insert dashboard here or user data
-            <div className="min-w-full ">
+            <div className="min-w-full overflow-y-auto">
               <BinderAnalytics />
             </div>
           ) : (
